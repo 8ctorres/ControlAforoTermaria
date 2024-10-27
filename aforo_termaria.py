@@ -26,6 +26,18 @@ except KeyError as e:
     print("ERROR!! Falta alguna variable de entorno de INFLUX: ", str(e))
     exit(-1)
 
+### CONEXION TLS A INFLUX
+
+try:
+    INFLUX_SSLVERIFY = os.environ['APP_AFORO_INFLUX_SSLVERIFY']
+except KeyError:
+    INFLUX_SSLVERIFY = True
+
+try:
+    INFLUX_SSLCACERT = os.environ['APP_AFORO_INFLUX_SSL_CACERT']
+except KeyError:
+    INFLUX_SSLCACERT = "/usr/src/app/ssl_cacert.crt"
+
 def get_crsf_token(input: str) -> str:
     # index +32 porque es la longitud del string de búsqueda
     inicio = input.index("<meta name=\"csrf-token\" content=") + 32
@@ -142,7 +154,7 @@ def bucle_principal(session_info: SessionInfo, influx_api_writer: influxdb_clien
 def main():
     print("Iniciando...")
     # Inicializamos el cliente de InfluxDB
-    cliente_influx = InfluxDBClient(url=INFLUX_SERVER,token=INFLUX_TOKEN,org=INFLUX_ORG,ssl_ca_cert="/usr/src/app/ssl_cacert.crt")
+    cliente_influx = InfluxDBClient(url=INFLUX_SERVER,token=INFLUX_TOKEN,org=INFLUX_ORG,verify_ssl=INFLUX_SSLVERIFY,ssl_ca_cert=INFLUX_SSLCACERT)
     influx_api_writer = cliente_influx.write_api(write_options=SYNCHRONOUS)
     while (True):
         # Iniciamos la sesión haciendo la petición inicial
