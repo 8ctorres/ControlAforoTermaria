@@ -31,8 +31,11 @@ except KeyError as e:
 try:
     if os.environ['APP_AFORO_INFLUX_SSLVERIFY'] in {"True", "true", "yes"}:
         INFLUX_SSLVERIFY = True
-    else:
+    elif os.environ['APP_AFORO_INFLUX_SSLVERIFY'] in {"False", "False", "no"}:
         INFLUX_SSLVERIFY = False
+    else:
+        print("ERROR!! La variable APP_AFORO_INFLUX_SSLVERIFY tiene un valor erróneo", os.environ['APP_AFORO_INFLUX_SSLVERIFY'])
+        exit(-1)
 except KeyError:
     INFLUX_SSLVERIFY = True
 
