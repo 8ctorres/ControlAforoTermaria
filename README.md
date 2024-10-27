@@ -39,6 +39,14 @@ docker build -t whatever-registry.com/aforo-termaria:latest .
 docker push whatever-registry.com/aforo-termaria:latest
 ```
 
+Para lanzar el contenedor de docker de forma "standalone", se lanzaría con el siguiente comando, incluyendo el fichero con las variables de entorno, y pasando como bind mount el fichero del certificado, en caso de utilizarse.
+
+```console
+docker run --env-file aforo_termaria.env -v ./ssl_cacert.crt:/usr/src/app/ssl_cacert.crt --name aforo-termaria-app aforo-termaria
+```
+
+Otra opción es utilizar docker compose o docker swarm. Ver la documentación oficial de Docker al respecto
+
 ### Uso nativo
 
 Para usar la aplicación nativamente, se debe crear un entorno virtual de Python e instalar los paquetes indicados en el fichero requirements.txt. La aplicación está desarrollada y probada en Python 3.12.7, aunque debería funcionar en cualquier versión posterior a 3.8.
