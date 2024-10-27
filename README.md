@@ -10,10 +10,10 @@ La aplicación puede utilizarse nativamente o en un contenedor Docker. En ambos 
 
 Se utilizan variables de entorno para los parámetros de conexión a la instancia de InfluxDB.
 
-- APP_AFORO_INFLUX_SERVER: La URL de conexión al servicio de InfluxDB
-- APP_AFORO_INFLUX_ORG: La organización en InfluxDB
-- APP_AFORO_INFLUX_BUCKET: El Bucket donde se almacena la información en InfluxDB
-- APP_AFORO_INFLUX_TOKEN: El token de autenticación para escribir en InfluxDB
+- ``APP_AFORO_INFLUX_SERVER``: La URL de conexión al servicio de InfluxDB
+- ``APP_AFORO_INFLUX_ORG``: La organización en InfluxDB
+- ``APP_AFORO_INFLUX_BUCKET``: El Bucket donde se almacena la información en InfluxDB
+- ``APP_AFORO_INFLUX_TOKEN``: El token de autenticación para escribir en InfluxDB
 
 Adicionalmente, existe una variable APP_AFORO_TIEMPO_ESPERA que se puede utilizar para especificar cada cuanto tiempo se hace la consulta. Si no se define, por defecto el tiempo es de 2 minutos.
 
