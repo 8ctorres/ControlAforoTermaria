@@ -29,14 +29,17 @@ except KeyError as e:
 ### CONEXION TLS A INFLUX
 
 try:
-    INFLUX_SSLVERIFY = os.environ['APP_AFORO_INFLUX_SSLVERIFY']
+    if os.environ['APP_AFORO_INFLUX_SSLVERIFY'] in {"True", "true", "yes"}:
+        INFLUX_SSLVERIFY = True
+    else:
+        INFLUX_SSLVERIFY = False
 except KeyError:
     INFLUX_SSLVERIFY = True
 
 try:
     INFLUX_SSLCACERT = os.environ['APP_AFORO_INFLUX_SSL_CACERT']
 except KeyError:
-    INFLUX_SSLCACERT = "/usr/src/app/ssl_cacert.crt"
+    INFLUX_SSLCACERT = ""
 
 def get_crsf_token(input: str) -> str:
     # index +32 porque es la longitud del string de búsqueda
@@ -154,7 +157,10 @@ def bucle_principal(session_info: SessionInfo, influx_api_writer: influxdb_clien
 def main():
     print("Iniciando...")
     # Inicializamos el cliente de InfluxDB
-    cliente_influx = InfluxDBClient(url=INFLUX_SERVER,token=INFLUX_TOKEN,org=INFLUX_ORG,verify_ssl=INFLUX_SSLVERIFY,ssl_ca_cert=INFLUX_SSLCACERT)
+    if len(INFLUX_SSLCACERT) == 0:
+        cliente_influx = InfluxDBClient(url=INFLUX_SERVER,token=INFLUX_TOKEN,org=INFLUX_ORG,verify_ssl=INFLUX_SSLVERIFY)
+    else:
+        cliente_influx = InfluxDBClient(url=INFLUX_SERVER,token=INFLUX_TOKEN,org=INFLUX_ORG,verify_ssl=INFLUX_SSLVERIFY,ssl_ca_cert=INFLUX_SSLCACERT)
     influx_api_writer = cliente_influx.write_api(write_options=SYNCHRONOUS)
     while (True):
         # Iniciamos la sesión haciendo la petición inicial
